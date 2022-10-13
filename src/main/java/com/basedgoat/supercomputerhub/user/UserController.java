@@ -1,8 +1,7 @@
-package com.basedgoat.supercomputerhub;
+package com.basedgoat.supercomputerhub.user;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -14,23 +13,50 @@ import java.util.List;
 @RequestMapping(value = "user")
 public class UserController {
     /**
+     * This is called dependency injection. It is very based
+     */
+
+    private final UserService service;
+
+    @Autowired
+    public UserController(UserService service) {
+        this.service = service;
+    }
+
+    /**
      * The base mapping
      * @return a list of all the current users
      */
     @GetMapping
-    public List<User> base() {
-        return List.of(
-                new User("arnabg", 7505009, "Password123!"),
-                new User("ayush_seal", 1234567, "IamVeryCringe!")
-        );
+    @ResponseBody
+    public List<User> getUsers() {
+        return service.getUsers();
     }
 
     /**
-     * The test page
-     * @return a sample list of "hello" and "world", verifying that the server is accessible
+     * Returns a user by their id
      */
-    @GetMapping(value = "test")
-    public List<String> test() {
-        return List.of("Hello", "World");
+    @GetMapping(value =  "find")
+    @ResponseBody
+    public User getUserById(@RequestParam Long id) {
+        try {
+            return service.getUserById(id);
+        } catch (UserNotFoundException e) {
+            return null;
+        }
     }
+
+
+    @PostMapping
+    @ResponseBody
+    public User createUser(@RequestBody User newUser) {
+        return service.addUser(newUser);
+    }
+
+    @PostMapping(value = "login")
+    @ResponseBody
+    public User login(@RequestBody String username, @RequestBody int studentId, @RequestBody String password) {
+        
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.basedgoat.supercomputerhub;
+package com.basedgoat.supercomputerhub.user;
 
 import org.springframework.beans.factory.annotation.Value;
 
@@ -27,10 +27,6 @@ public class User {
     private String password;
 
     private static Long currentId = 0L;
-    private static String generateSalt() {
-        var time = new Date();
-        return String.valueOf(time.getTime());
-    }
 
     @Value("${spring.application.defaultPassword}")
     private static String defaultPassword;
