@@ -1,6 +1,9 @@
 package com.basedgoat.supercomputerhub.user;
 
+import com.basedgoat.supercomputerhub.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,14 +39,10 @@ public class UserController {
     /**
      * Returns a user by their id
      */
-    @GetMapping(value =  "find")
+    @GetMapping(value =  "find/{id}")
     @ResponseBody
-    public User getUserById(@RequestParam Long id) {
-        try {
-            return service.getUserById(id);
-        } catch (UserNotFoundException e) {
-            return null;
-        }
+    public User getUserById(@PathVariable Long id) throws UserNotFoundException {
+        return service.getUserById(id);
     }
 
 
@@ -55,8 +54,13 @@ public class UserController {
 
     @PostMapping(value = "login")
     @ResponseBody
-    public User login(@RequestBody String username, @RequestBody int studentId, @RequestBody String password) {
-        
+    public User login(@RequestBody int studentId, @RequestBody String password) throws UserNotFoundException {
+        return service.authenticateUser(studentId, password);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Object> exception(UserNotFoundException error) {
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
 }

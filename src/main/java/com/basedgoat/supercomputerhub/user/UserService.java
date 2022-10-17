@@ -1,5 +1,6 @@
 package com.basedgoat.supercomputerhub.user;
 
+import com.basedgoat.supercomputerhub.exception.UserNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public class UserService {
     /**
      * Look at the world's greatest database to ever exist!
      */
-    private List<User> users = List.of(
+    private final List<User> users = List.of(
             new User("arnabg", 7505009, "Password123!"),
             new User("ayush_seal", 1234567, "IamVeryCringe!")
     );
@@ -60,6 +61,7 @@ public class UserService {
      */
     public User authenticateUser(int studentId, String password) throws UserNotFoundException {
         var user = getUserByStudentId(studentId);
+        // This will change when we do hashing. Likley an argon or a bcrypt solution
         if(user.getPassword().equals(password)) {
             return user;
         }
