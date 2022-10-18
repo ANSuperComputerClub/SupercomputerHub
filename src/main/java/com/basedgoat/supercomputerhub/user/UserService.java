@@ -1,5 +1,6 @@
 package com.basedgoat.supercomputerhub.user;
 
+import com.basedgoat.supercomputerhub.exception.AuthenticationException;
 import com.basedgoat.supercomputerhub.exception.UserNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ public class UserService {
             new User("arnabg", 7505009, "Password123!"),
             new User("ayush_seal", 1234567, "IamVeryCringe!")
     );
+
     /**
      * Grabs the current list of users.
      */
@@ -28,8 +30,8 @@ public class UserService {
      * Finds a user in the "database" based on it's id
      */
     public User getUserById(Long id) throws UserNotFoundException {
-        for(User user: users) {
-            if(user.getId().equals(id)) {
+        for (User user : users) {
+            if (user.getId().equals(id)) {
                 return user;
             }
         }
@@ -40,12 +42,9 @@ public class UserService {
      * Finds a user in the "database" based on its student id
      */
     public User getUserByStudentId(int id) throws UserNotFoundException {
-        for(User user: users) {
-            if(user.getStudentId() == id) {
-                return user;
-            }
-        }
-        throw new UserNotFoundException();
+        User user = users.stream().filter(u -> u.getStudentId() == id).findFirst().orElse(null);
+        if(user == null) throw new UserNotFoundException();
+        return user;
     }
 
     /**
@@ -56,15 +55,15 @@ public class UserService {
         return user;
     }
 
-    /*
-    Verifies the password for a given user id
+    /**
+     * Verifies the password for a given user id
      */
-    public User authenticateUser(int studentId, String password) throws UserNotFoundException {
+    public User authenticateUser(int studentId, String password) throws UserNotFoundException, AuthenticationException {
         var user = getUserByStudentId(studentId);
-        // This will change when we do hashing. Likley an argon or a bcrypt solution
-        if(user.getPassword().equals(password)) {
+        // This will change when we do hashing. Likely an argon or a bcrypt solution
+        if (user.getPassword().equals(password)) {
             return user;
         }
-        return null;
+        throw new AuthenticationException();
     }
 }

@@ -17,7 +17,8 @@ public class VirtualMachineService {
 
     /**
      * Gets all virtual machines
-     * @return every virual machine
+     *
+     * @return every virtual machine
      */
     public List<VirtualMachine> getVirtualMachines() {
         return virtualMachines;
@@ -29,8 +30,8 @@ public class VirtualMachineService {
     }
 
     public VirtualMachine getVirtualMachineById(Long id) throws VirtualMachineNotFoundException {
-        for(VirtualMachine machine: virtualMachines) {
-            if(machine.getId().equals(id)) {
+        for (VirtualMachine machine : virtualMachines) {
+            if (machine.getId().equals(id)) {
                 return machine;
             }
         }
@@ -39,13 +40,38 @@ public class VirtualMachineService {
 
     /**
      * Starts up the VM
-     * @param vm
-     * @return
+     *
+     * @param vm the virtual machine to start up
      */
-    public boolean startVirtualMachine(VirtualMachine vm) {
+    public void startVirtualMachine(VirtualMachine vm /* In the future do we want to make this an id rather than an object?*/) {
         // In here we want to insert the server code that actually does the starting up
         vm.startVm();
-        return true;
+        // Maybe a microservice for monitoring VM's?
+        // In the future we need to throw an error if it fails
+    }
+
+    public int getTotalCoreCount() {
+        int coreCount = 0;
+        for(VirtualMachine vm: virtualMachines) {
+            coreCount += vm.getCores();
+        }
+        return coreCount;
+    }
+
+    public int getTotalRam() {
+        int ram = 0;
+        for(VirtualMachine vm: virtualMachines) {
+            ram += vm.getRam();
+        }
+        return ram;
+    }
+
+    public int getTotalStorage() {
+        int storage = 0;
+        for(VirtualMachine vm: virtualMachines) {
+            storage += vm.getStorage();
+        }
+        return storage;
     }
 
 }

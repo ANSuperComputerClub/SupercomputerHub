@@ -1,5 +1,6 @@
 package com.basedgoat.supercomputerhub.user;
 
+import com.basedgoat.supercomputerhub.exception.AuthenticationException;
 import com.basedgoat.supercomputerhub.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,7 @@ public class UserController {
 
     /**
      * The base mapping
+     *
      * @return a list of all the current users
      */
     @GetMapping
@@ -39,7 +41,7 @@ public class UserController {
     /**
      * Returns a user by their id
      */
-    @GetMapping(value =  "find/{id}")
+    @GetMapping(value = "find/{id}")
     @ResponseBody
     public User getUserById(@PathVariable Long id) throws UserNotFoundException {
         return service.getUserById(id);
@@ -54,7 +56,7 @@ public class UserController {
 
     @PostMapping(value = "login")
     @ResponseBody
-    public User login(@RequestBody int studentId, @RequestBody String password) throws UserNotFoundException {
+    public User login(@RequestBody int studentId, @RequestBody String password) throws UserNotFoundException, AuthenticationException {
         return service.authenticateUser(studentId, password);
     }
 

@@ -28,6 +28,7 @@ public class VirtualMachineController {
 
     /**
      * TODO Implement this method
+     *
      * @return the completed virtual machine, after it's inserted
      */
     @PostMapping
@@ -43,11 +44,12 @@ public class VirtualMachineController {
 
     /**
      * Starts the virtual machine
+     *
      * @param id the id of the virtual machine to start
      * @return Whether the VM was successfully started, or not
      */
     @GetMapping(value = "{id}/start")
-    public boolean startVirtualMachine(@PathVariable long id) throws VirtualMachineNotFoundException{
+    public boolean startVirtualMachine(@PathVariable long id) throws VirtualMachineNotFoundException {
         var vm = service.getVirtualMachineById(id);
         service.startVirtualMachine(vm);
         return true;
